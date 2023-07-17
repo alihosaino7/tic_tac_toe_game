@@ -28,11 +28,13 @@ function getRowIndex(cellIndex) {
 function handleDraw() {
   isDraw = true;
   showModal("Draw!");
+  removeListeners();
 }
 
 function handleWin() {
   isWon = true;
   showModal("You won!");
+  removeListeners();
 }
 
 function showModal(msg) {
@@ -55,8 +57,12 @@ function showModal(msg) {
 }
 
 function checkForWinner() {
+  let isBoardFilled = true;
   for (let row = 0; row < board.length; row++) {
     for (let col = 0; col < board[row].length; col++) {
+      if (board[row][col] === "") {
+        isBoardFilled = false;
+      }
       if (
         (board[row][col] !== "" &&
           board[row][col] === board[row][col + 1] &&
@@ -71,15 +77,12 @@ function checkForWinner() {
           board[0][2] === board[1][1] &&
           board[1][1] === board[2][0])
       ) {
-        isWon = true;
-        showModal("You won!");
-        removeListeners();
+        return handleWin();
       }
-
-      // if (row === 2 && col === 2 && !isWon) {
-      //   handleDraw();
-      // }
     }
+  }
+  if (isBoardFilled) {
+    handleDraw();
   }
 }
 
